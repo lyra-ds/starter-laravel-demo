@@ -27,6 +27,7 @@
         <form method="POST" action="/login">
             @csrf
 
+            <lyra:stack gap="5">
             <lyra:input
                 name="email"
                 type="email"
@@ -47,6 +48,8 @@
             <lyra:checkbox name="remember" label="Remember me" />
 
             <lyra:button type="submit" variant="primary" full>Sign in</lyra:button>
+            </lyra:stack>
+
         </form>
 
         <lyra:separator />

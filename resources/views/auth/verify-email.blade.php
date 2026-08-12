@@ -14,7 +14,10 @@
         <form method="POST" action="/email/verification-notification">
             @csrf
 
+            <lyra:stack gap="5">
             <lyra:button type="submit" variant="primary" full>Resend verification email</lyra:button>
+            </lyra:stack>
+
         </form>
 
         <lyra:separator />
@@ -22,7 +25,10 @@
         <form method="POST" action="/logout">
             @csrf
 
+            <lyra:stack gap="5">
             <lyra:button type="submit" variant="ghost" full>Log out</lyra:button>
+            </lyra:stack>
+
         </form>
     </lyra:card>
 </lyra:container>

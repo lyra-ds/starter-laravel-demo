@@ -15,6 +15,7 @@
         <form method="POST" action="/reset-password">
             @csrf
 
+            <lyra:stack gap="5">
             {{-- The only raw input this catalog accepts: a hidden token has
                  no visual representation, so there is no component for it. --}}
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
@@ -45,6 +46,8 @@
             />
 
             <lyra:button type="submit" variant="primary" full>Reset password</lyra:button>
+            </lyra:stack>
+
         </form>
     </lyra:card>
 </lyra:container>

@@ -16,6 +16,7 @@
         <form method="POST" action="/user/confirm-password">
             @csrf
 
+            <lyra:stack gap="5">
             <lyra:input
                 name="password"
                 type="password"
@@ -25,6 +26,8 @@
             />
 
             <lyra:button type="submit" variant="primary" full>Confirm</lyra:button>
+            </lyra:stack>
+
         </form>
     </lyra:card>
 </lyra:container>

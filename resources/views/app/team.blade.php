@@ -47,14 +47,36 @@
 @extends('layouts.shell')
 
 @section('body')
-<lyra:page-header title="Team">
-    <x-slot:description>Everyone with access to this workspace — {{ $totalMembers }} members.</x-slot:description>
-    <x-slot:actions>
-        <lyra:button variant="primary" size="sm" type="button">
-            <lyra:icon name="user-plus" :size="16" /> Invite member
-        </lyra:button>
-    </x-slot:actions>
-</lyra:page-header>
+<div x-data="{ inviteOpen: false }">
+    <lyra:page-header title="Team">
+        <x-slot:description>Everyone with access to this workspace — {{ $totalMembers }} members.</x-slot:description>
+        <x-slot:actions>
+            <lyra:button variant="primary" size="sm" type="button" x-on:click="inviteOpen = true">
+                <lyra:icon name="user-plus" :size="16" /> Invite member
+            </lyra:button>
+        </x-slot:actions>
+    </lyra:page-header>
+
+    <lyra:dialog title="Invite a member" x-model="inviteOpen">
+        <form id="invite-member-form" x-on:submit.prevent="inviteOpen = false; $store.lyraToasts.success('Invitation sent — demo only, nothing was saved.')">
+            <lyra:stack gap="4">
+                <lyra:input name="invite_name" label="Name" placeholder="e.g. Ana Souza" required />
+                <lyra:input name="invite_email" type="email" label="Email address" placeholder="ana@example.com" required />
+                <lyra:select name="invite_role" label="Role">
+                    <option value="engineer">Engineer</option>
+                    <option value="designer">Designer</option>
+                    <option value="product">Product</option>
+                    <option value="support">Support</option>
+                    <option value="maintainer">Maintainer</option>
+                </lyra:select>
+            </lyra:stack>
+        </form>
+        <x-slot:footer>
+            <lyra:button type="button" variant="ghost" x-on:click="inviteOpen = false">Cancel</lyra:button>
+            <lyra:button type="submit" variant="primary" form="invite-member-form">Send invite</lyra:button>
+        </x-slot:footer>
+    </lyra:dialog>
+</div>
 
 <section class="page-section">
     <lyra:data-table :columns="$teamColumns" :rows="$teamRows" client-sort hover />

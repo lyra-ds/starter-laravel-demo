@@ -46,6 +46,21 @@
 >
     <lyra:shell scroll="content" sidebar-label="Primary navigation">
         <x-slot:topbar>
+            {{-- Proxies the app-sidebar's own collapse control (hidden via CSS):
+                 the component keeps the state, the topbar carries the affordance.
+                 Upstream issue: app-sidebar should expose toggle placement. --}}
+            <span x-data="{ railed: false }" class="sidebar-toggle">
+                <lyra:icon-button
+                    variant="ghost"
+                    size="sm"
+                    label="Toggle sidebar"
+                    x-on:click="document.querySelector('.lyra-appsidebar__toggle')?.click(); railed = ! railed"
+                >
+                    <span x-show="! railed"><lyra:icon name="chevrons-left" :size="16" /></span>
+                    <span x-show="railed" x-cloak><lyra:icon name="chevrons-right" :size="16" /></span>
+                </lyra:icon-button>
+            </span>
+
             <nav class="topbar-nav" aria-label="Global">
                 <lyra:nav-link href="{{ route('components') }}">Components</lyra:nav-link>
                 <lyra:nav-link href="https://lyra-ds.dev">Docs</lyra:nav-link>
@@ -95,7 +110,44 @@
         </x-slot:topbar>
 
         <x-slot:sidebar>
-            <lyra:app-sidebar brand="Lyra Demo" :groups="$navGroups" :width="248" collapsible>
+            <lyra:app-sidebar :groups="$navGroups" :width="248" collapsible>
+                <x-slot:brand>
+                    {{-- The switcher announces selection via lyra:change; "create"
+                         opens the demo's create-workspace dialog. --}}
+                    <div
+                        class="sidebar-brand"
+                        x-data="{ wsOpen: false }"
+                        x-on:lyra:change="$event.detail.id === 'create'
+                            ? wsOpen = true
+                            : $store.lyraToasts.info('Workspace switching is a demo — nothing was changed.')"
+                    >
+                        <lyra:brand mark="/img/lyra-mark.svg" href="{{ route('dashboard') }}" :size="22">Lyra Demo</lyra:brand>
+                        <lyra:workspace-switcher
+                            :workspaces="[
+                                ['id' => 'q3', 'name' => 'Q3 Release', 'plan' => 'Pro'],
+                                ['id' => 'marketing', 'name' => 'Marketing', 'plan' => 'Free'],
+                            ]"
+                            current="q3"
+                            create
+                        />
+
+                        <lyra:dialog title="Create workspace" x-model="wsOpen">
+                            <form id="create-workspace-form" x-on:submit.prevent="wsOpen = false; $store.lyraToasts.success('Workspace created — demo only, nothing was saved.')">
+                                <lyra:stack gap="4">
+                                    <lyra:input name="workspace_name" label="Workspace name" placeholder="e.g. Q4 Launch" required />
+                                    <lyra:select name="workspace_plan" label="Plan">
+                                        <option value="free">Free</option>
+                                        <option value="pro">Pro</option>
+                                    </lyra:select>
+                                </lyra:stack>
+                            </form>
+                            <x-slot:footer>
+                                <lyra:button type="button" variant="ghost" x-on:click="wsOpen = false">Cancel</lyra:button>
+                                <lyra:button type="submit" variant="primary" form="create-workspace-form">Create workspace</lyra:button>
+                            </x-slot:footer>
+                        </lyra:dialog>
+                    </div>
+                </x-slot:brand>
                 <x-slot:footer>
                     <div class="lyra-appsidebar__user">
                         <lyra:avatar :name="auth()->user()->name" size="sm" />
@@ -142,5 +194,7 @@
             </lyra:nav-link>
         @endforeach
     </nav>
+
+    <lyra:toast-stack />
 </div>
 @endsection

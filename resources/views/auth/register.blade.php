@@ -15,6 +15,7 @@
         <form method="POST" action="/register">
             @csrf
 
+            <lyra:stack gap="5">
             <lyra:input
                 name="name"
                 type="text"
@@ -50,6 +51,8 @@
             />
 
             <lyra:button type="submit" variant="primary" full>Create account</lyra:button>
+            </lyra:stack>
+
         </form>
 
         <lyra:separator />

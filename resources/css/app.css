@@ -172,9 +172,13 @@
 /* Page layout only for the product screens (dashboard/schedule/files/team/settings) —
    never reaches into .lyra-* rules. Gives the shell a full-viewport frame and lays out
    the per-screen content grids; appearance still comes entirely from the design system. */
+/* Fixed app frame: pins the shell to the viewport so only the content pane
+   scrolls — percentage-height chains proved fragile on iPad Safari, where the
+   body scrolled and dragged the sidebar out of view. */
 .product-shell {
-  height: 100vh;
-  height: 100dvh;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
 }
 
 .product-shell .lyra-shell {
@@ -205,16 +209,60 @@
   height: 100%;
 }
 
-/* DS gap: the base shell rules set align-self: start on the sidebar (for the
-   page-scroll mode's sticky column) and the content mode never resets it, so
-   the column refuses to stretch. Logged upstream; reset locally. */
-.product-shell .lyra-shell--content .lyra-shell__sidebar {
-  align-self: stretch;
+/* DS gap: the base (page-mode) shell rules set align-items: start, a grid
+   gap, and sticky sidebar behavior, and the content mode never resets them —
+   columns refuse to stretch (content clips instead of scrolling, the footer
+   never shows) and a phantom gutter splits sidebar from content. Logged
+   upstream; reset locally. */
+.product-shell .lyra-shell--content {
+  align-items: stretch;
+  gap: 0;
 }
 
-/* Rail state: the text-only brand cannot shrink to the rail width; hide it. */
+.product-shell .lyra-shell--content .lyra-shell__sidebar {
+  align-self: stretch;
+  padding-right: 0;
+}
+
+/* Rail state: the brand block (logo + workspace switcher) cannot shrink to
+   the rail width; hide it. */
 .product-shell .lyra-appsidebar--rail .lyra-appsidebar__brand {
   display: none;
+}
+
+/* The collapse affordance moves to the topbar (see layouts/shell); the
+   component's built-in bottom toggle hides until the DS exposes placement. */
+.product-shell .lyra-appsidebar__toggle {
+  display: none;
+}
+
+/* Breathing room for the nav: the DS ships a denser default (2px gaps,
+   36px items) — opened up here as page-level rhythm; logged as token
+   feedback upstream. Box-layout properties only. */
+.product-shell .lyra-sbgroup__items {
+  gap: 4px;
+}
+
+.product-shell .lyra-sbgroup__item {
+  min-height: 40px;
+}
+
+.product-shell .lyra-appsidebar__groups {
+  gap: var(--space-6, 24px);
+}
+
+/* The brand slot stacks the logo and the workspace switcher. */
+.sidebar-brand {
+  display: grid;
+  gap: var(--space-3, 0.75rem);
+}
+
+/* Dialog forms: actions align right below the fields. */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: var(--space-2, 0.5rem);
 }
 
 .topbar-nav {

@@ -16,6 +16,7 @@
         <form method="POST" action="/two-factor-challenge">
             @csrf
 
+            <lyra:stack gap="5">
             {{-- Known catalog gap: there is no dedicated OTP-code component,
                  so a plain `lyra:input` stands in for it. --}}
             <lyra:input
@@ -28,6 +29,8 @@
             />
 
             <lyra:button type="submit" variant="primary" full>Verify</lyra:button>
+            </lyra:stack>
+
         </form>
 
         <lyra:separator />
@@ -38,6 +41,7 @@
             <form method="POST" action="/two-factor-challenge">
                 @csrf
 
+            <lyra:stack gap="5">
                 <lyra:input
                     name="recovery_code"
                     type="text"
@@ -47,6 +51,8 @@
                 />
 
                 <lyra:button type="submit" variant="secondary" full>Verify with recovery code</lyra:button>
+            </lyra:stack>
+
             </form>
         </details>
     </lyra:card>

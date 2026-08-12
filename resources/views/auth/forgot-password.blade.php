@@ -20,6 +20,7 @@
         <form method="POST" action="/forgot-password">
             @csrf
 
+            <lyra:stack gap="5">
             <lyra:input
                 name="email"
                 type="email"
@@ -30,6 +31,8 @@
             />
 
             <lyra:button type="submit" variant="primary" full>Email password reset link</lyra:button>
+            </lyra:stack>
+
         </form>
 
         <lyra:separator />
