@@ -233,3 +233,10 @@
   font-size: 1.05rem;
   font-weight: 650;
 }
+
+/* Settings › Security: box layout for the 2FA QR code only — the SVG
+   itself comes from Fortify and the surrounding visuals from the DS. */
+.settings-qr {
+  display: inline-flex;
+  max-width: 100%;
+}

@@ -144,11 +144,13 @@ return [
     |
     */
 
-    'passkeys' => [
-        'relying_party_id' => parse_url(config('app.url'), PHP_URL_HOST),
-        'allowed_origins' => [config('app.url')],
-        'timeout' => 60000,
-    ],
+    // Only read by the (disabled) passkeys feature below — kept commented so
+    // re-enabling passkeys later is a two-block change.
+    // 'passkeys' => [
+    //     'relying_party_id' => parse_url(config('app.url'), PHP_URL_HOST),
+    //     'allowed_origins' => [config('app.url')],
+    //     'timeout' => 60000,
+    // ],
 
     /*
     |--------------------------------------------------------------------------
@@ -172,9 +174,11 @@ return [
             'confirmPassword' => true,
             // 'window' => 0,
         ]),
-        Features::passkeys([
-            'confirmPassword' => true,
-        ]),
+        // Passkeys stay disabled: no demo UI exercises them, and without the
+        // model trait the endpoints would 500 on a public host.
+        // Features::passkeys([
+        //     'confirmPassword' => true,
+        // ]),
     ],
 
 ];
