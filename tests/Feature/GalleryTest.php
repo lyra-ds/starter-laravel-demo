@@ -14,3 +14,16 @@ it('covers every component the package ships', function (): void {
 
     expect($missing->all())->toBe([], 'componentes ausentes da galeria: '.$missing->implode(', '));
 });
+
+it('points the workspace brand mark at a shipped asset', function (): void {
+    $gallery = (string) file_get_contents(resource_path('views/components-gallery.blade.php'));
+
+    expect($gallery)->not->toContain('mark="/logo.svg"');
+
+    // Every referenced mark must exist under public/.
+    preg_match_all('/mark="([^"]+)"/', $gallery, $marks);
+
+    foreach ($marks[1] as $mark) {
+        expect(file_exists(public_path(ltrim($mark, '/'))))->toBeTrue("mark asset ausente: {$mark}");
+    }
+});

@@ -15,6 +15,8 @@ class DemoSeeder extends Seeder
      */
     public function run(): void
     {
+        // Deliberate tradeoff vs the plan's "nem sobrescrever": on a public
+        // showcase, self-healing demo credentials beat preserving edits.
         User::updateOrCreate(
             ['email' => 'demo@lyra-ds.dev'],
             [

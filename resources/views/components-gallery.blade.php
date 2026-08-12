@@ -863,7 +863,7 @@
         <section class="gallery-section" id="identity">
             <h2>Identity</h2>
             <div class="gallery-row">
-                <lyra:brand mark="/logo.svg" href="#" :size="32">Lyra workspace</lyra:brand>
+                <lyra:brand mark="/img/lyra-mark.svg" href="#" :size="32">Lyra workspace</lyra:brand>
                 <lyra:icon-button label="Open workspace settings" variant="soft">
                     <lyra:icon name="settings" :size="18" />
                 </lyra:icon-button>
