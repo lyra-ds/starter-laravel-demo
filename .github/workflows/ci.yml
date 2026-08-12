@@ -1,0 +1,64 @@
+name: CI
+
+# Sem o filtro de branch abaixo, um push numa branch de PR dispara `push` e
+# `pull_request` para o mesmo commit e a matriz roda duas vezes. `main` continua
+# coberta pelo push pós-merge, e toda branch de trabalho pelo pull_request.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+# Um push novo sobre um PR aposenta a run anterior; em `main` nada é cancelado,
+# porque cada commit lá precisa do seu próprio veredito.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Check code style
+        run: vendor/bin/pint --test
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      # Tests run last: some Feature tests render views that go through
+      # @vite() (see resources/views/layouts/app.blade.php), which needs
+      # public/build/manifest.json to already exist.
+      - name: Run tests
+        run: vendor/bin/pest

@@ -1,0 +1,78 @@
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@lyra-ds/styles/styles.css';
+
+/*
+ * Antes do Alpine bootar, um menu ou diálogo fechado ainda não recebeu x-show —
+ * sem esta regra ele pisca aberto no primeiro paint. O pacote de styles não a
+ * embarca porque ela é uma decisão da aplicação, não do design system.
+ */
+[x-cloak] {
+  display: none !important;
+}
+
+/*
+ * White-label demo brands for the landing page selector. Each [data-brand]
+ * scope defines a subset of the 4 input tokens the package's white-label
+ * contract exposes (--brand is required; --brand-contrast, --brand-radius,
+ * and --brand-font are optional). See the styles package README's
+ * "White-label brand contract" section for how these derive every accent
+ * value.
+ */
+[data-brand='citrus'] {
+  --brand: #f97316;
+  --brand-radius: 4px;
+}
+
+[data-brand='ocean'] {
+  --brand: #38bdf8;
+  --brand-contrast: #04121c;
+  --brand-radius: 20px;
+}
+
+[data-brand='grape'] {
+  --brand: #7c3aed;
+  --brand-font: 'JetBrains Mono', monospace;
+}
+
+/* Page layout only for the welcome demo — never reaches into .lyra-* rules. */
+.welcome-shell {
+  width: min(48rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0 5rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.welcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.welcome-lede {
+  color: var(--text-secondary);
+}
+
+.welcome-section {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.welcome-section h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 650;
+}
+
+.welcome-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}

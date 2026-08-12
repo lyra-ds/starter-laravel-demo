@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Lyra mark">
+  <title>Lyra mark</title>
+  <rect width="32" height="32" rx="8" fill="#4338CA" />
+  <path d="M9 23V9c3 0 5 2 5 5v9M23 23V9c-3 0-5 2-5 5v9" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" />
+</svg>
