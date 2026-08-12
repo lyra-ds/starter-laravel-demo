@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<lyra:container max="480">
+<lyra:container max="480" class="auth-screen">
     <lyra:card>
         <lyra:brand mark="/img/lyra-mark.svg" />
         <h1>Verify your email</h1>

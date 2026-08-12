@@ -240,3 +240,15 @@
   display: inline-flex;
   max-width: 100%;
 }
+
+/*
+ * Auth screens: the card centers vertically in the viewport. Page-layout
+ * only — box properties on a local class, nothing from the DS is restyled.
+ */
+.auth-screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 2rem;
+}

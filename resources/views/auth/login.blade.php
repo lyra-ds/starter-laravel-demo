@@ -9,7 +9,7 @@
 {{-- `max` must be numeric (px): the keyword form (`max="sm"`) emits invalid
      CSS (`--container-max: smpx`) — a known DS bug already on the Task-10
      findings list. --}}
-<lyra:container max="480">
+<lyra:container max="480" class="auth-screen">
     <lyra:card>
         {{-- `mark` has no default in the brand component; a placeholder
              asset path is used until the app supplies its own logo. --}}
