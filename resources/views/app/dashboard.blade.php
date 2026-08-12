@@ -2,8 +2,15 @@
 
 @section('body')
 <lyra:page-header title="Dashboard">
-    <x-slot:eyebrow>Workspace overview</x-slot:eyebrow>
     <x-slot:description>A snapshot of what changed across the team this week.</x-slot:description>
+    <x-slot:actions>
+        <lyra:button variant="secondary" size="sm" type="button" x-on:click="window.location.assign('{{ route('files') }}')">
+            <lyra:icon name="upload" :size="16" /> Upload file
+        </lyra:button>
+        <lyra:button variant="primary" size="sm" type="button" x-on:click="window.location.assign('{{ route('schedule') }}')">
+            <lyra:icon name="plus" :size="16" /> New booking
+        </lyra:button>
+    </x-slot:actions>
 </lyra:page-header>
 
 <div class="product-stats">
@@ -16,5 +23,8 @@
     @endforeach
 </div>
 
-<lyra:data-table :columns="$activityColumns" :rows="$activityRows" hover />
+<section class="page-section">
+    <h2 class="page-section__title">Recent activity</h2>
+    <lyra:data-table :columns="$activityColumns" :rows="$activityRows" client-sort hover density="comfortable" />
+</section>
 @endsection

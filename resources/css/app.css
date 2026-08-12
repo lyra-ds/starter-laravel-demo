@@ -174,45 +174,199 @@
    the per-screen content grids; appearance still comes entirely from the design system. */
 .product-shell {
   height: 100vh;
+  height: 100dvh;
 }
 
 .product-shell .lyra-shell {
   height: 100%;
 }
 
-.product-shell .lyra-shell--page {
-  height: 100vh;
+/* The sidebar column hugs the app-sidebar so the rail collapse animates the
+   whole column instead of leaving dead space (box layout only). */
+.product-shell .lyra-shell--content .lyra-shell__sidebar {
+  width: auto;
 }
 
-.product-nav {
-  display: grid;
+/* Content column stacks page + footer; short pages still pin the footer down. */
+.product-shell .lyra-shell--content .lyra-shell__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-shell .page {
+  flex: 1 0 auto;
+}
+
+/* The app-sidebar stretches to the full column height so its footer
+   (user card + collapse toggle) pins to the bottom of the viewport.
+   The component's own height: 100% needs every wrapper in the chain
+   to carry a height. */
+.product-shell .lyra-shell__sidebar > * {
+  height: 100%;
+}
+
+/* DS gap: the base shell rules set align-self: start on the sidebar (for the
+   page-scroll mode's sticky column) and the content mode never resets it, so
+   the column refuses to stretch. Logged upstream; reset locally. */
+.product-shell .lyra-shell--content .lyra-shell__sidebar {
+  align-self: stretch;
+}
+
+/* Rail state: the text-only brand cannot shrink to the rail width; hide it. */
+.product-shell .lyra-appsidebar--rail .lyra-appsidebar__brand {
+  display: none;
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
   gap: 0.25rem;
-  padding: 0 var(--space-3, 0.75rem);
 }
 
-.product-nav__link {
+.topbar-actions {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.product-shell__footer {
-  display: grid;
-  gap: 0.5rem;
-  padding: 0 var(--space-3, 0.75rem);
+/* Mobile: sidebar gives way to a fixed bottom bar of real links. */
+.mobile-nav {
+  display: none;
 }
 
-.product-shell__footer form {
+@media (max-width: 767px) {
+  .product-shell .lyra-shell__sidebar {
+    display: none;
+  }
+
+  .topbar-nav {
+    display: none;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 30;
+    display: flex;
+    justify-content: space-around;
+    gap: 0;
+    padding: 0.375rem 0.25rem calc(0.375rem + env(safe-area-inset-bottom));
+    background: var(--surface-card);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .mobile-nav__link {
+    flex-direction: column;
+    gap: 0.125rem;
+    font-size: var(--text-xs);
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Keep the last content visible above the fixed bar. */
+  .product-shell .lyra-shell--content .lyra-shell__content {
+    padding-bottom: 4.5rem;
+  }
+}
+
+.page {
+  display: grid;
+  gap: var(--space-6, 2rem);
+  padding: var(--space-6, 2rem) var(--space-6, 2rem) var(--space-7, 3rem);
+  max-width: 72rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-footer {
+  margin-top: auto;
+}
+
+.page-section {
+  display: grid;
+  gap: var(--space-3, 0.75rem);
+}
+
+.page-section__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold, 600);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.page-section .lyra-pagination {
+  justify-self: end;
+}
+
+/* Navbar user menu — local page furniture composed from DS tokens. */
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-md, 0.5rem);
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.user-chip:hover {
+  background: var(--surface-sunken);
+}
+
+.user-chip__name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium, 500);
+}
+
+.user-menu {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.user-menu form {
   display: contents;
 }
 
-.product-shell .lyra-shell__content {
+.user-menu__id {
   display: grid;
-  gap: 1.5rem;
-  padding: 2rem;
-  max-width: 64rem;
-  margin: 0 auto;
+  gap: 0.125rem;
+  padding: 0.375rem 0.5rem;
+}
+
+.user-menu__name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold, 600);
+  color: var(--text-primary);
+}
+
+.user-menu__email {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.user-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-sm, 0.375rem);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.user-menu__item:hover {
+  background: var(--surface-sunken);
+}
+
+.user-menu__item--danger {
+  color: var(--danger, #b3261e);
 }
 
 .product-stats {
