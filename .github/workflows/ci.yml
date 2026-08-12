@@ -45,6 +45,14 @@ jobs:
       - name: Check code style
         run: vendor/bin/pint --test
 
+      # Mirrors the container boot path (Dockerfile CMD): migrations must
+      # apply cleanly on a fresh database and the seeder must be idempotent.
+      - name: Run migrations and seed
+        run: |
+          touch database/database.sqlite
+          php artisan migrate --force
+          php artisan db:seed --force
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
