@@ -23,6 +23,15 @@ npm run build
 php artisan serve
 ```
 
+Prefer containers? [Laravel Sail](https://laravel.com/docs/sail) ships as a dev dependency:
+
+```sh
+vendor/bin/sail up -d
+vendor/bin/sail artisan migrate --seed
+```
+
+The app listens on `APP_PORT` (defaults to `80`; set it in `.env` if the port is taken).
+
 ## Authentication
 
 Unlike the template, this demo wires up [Laravel Fortify](https://laravel.com/docs/fortify)
