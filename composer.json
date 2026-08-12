@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "lyra-ds/starter-laravel-demo",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Live demo of the lyra-ds/starter-laravel template.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
