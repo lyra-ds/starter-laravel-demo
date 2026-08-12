@@ -23,6 +23,22 @@ npm run build
 php artisan serve
 ```
 
+## Authentication
+
+Unlike the template, this demo wires up [Laravel Fortify](https://laravel.com/docs/fortify)
+for real, with a SQLite database and a public demo account so visitors can
+try the login, registration, and two-factor flows:
+
+```sh
+php artisan migrate
+php artisan db:seed
+```
+
+Demo credentials (public — this is a showcase, not a secured environment):
+
+- Email: `demo@lyra-ds.dev`
+- Password: `lyra-demo-2026`
+
 ## Scripts
 
 | Command                  | What it does                     |
