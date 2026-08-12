@@ -76,3 +76,95 @@
   align-items: center;
   gap: 0.75rem;
 }
+
+/* Page layout only for the components gallery — never reaches into .lyra-* rules. */
+.gallery-shell {
+  width: min(72rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0 5rem;
+}
+
+.gallery-header {
+  margin-bottom: 2rem;
+}
+
+.gallery-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.gallery-header p,
+.gallery-section > p {
+  color: var(--text-secondary);
+}
+
+.gallery-layout,
+.gallery-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.gallery-grid {
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.gallery-section {
+  padding: 1.5rem;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.gallery-section--wide {
+  grid-column: span 2;
+}
+
+.gallery-column {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+@media (max-width: 40rem) {
+  .gallery-section--wide {
+    grid-column: auto;
+  }
+}
+
+.gallery-section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 650;
+}
+
+.gallery-section > * + * {
+  margin-top: 1rem;
+}
+
+/* The content-scroll shell expects a fixed-height frame (100% of the viewport in a real app).
+   Give it one inside the gallery card so it doesn't overflow the section. */
+.gallery-section .lyra-shell--content {
+  position: relative;
+  height: 24rem;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* Float the action bar over the shell frame instead of the viewport, mirroring how it
+   hovers at the bottom of the screen in a real app. */
+.gallery-section .lyra-actionbar {
+  position: absolute;
+  width: max-content;
+  max-width: calc(100% - var(--space-8));
+  animation: none;
+}
+
+.gallery-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
