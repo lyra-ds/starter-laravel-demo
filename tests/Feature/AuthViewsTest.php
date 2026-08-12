@@ -31,3 +31,12 @@ it('never falls back to raw HTML controls', function (string $view): void {
     expect($html)->not->toMatch('/<input(?![^>]*class="[^"]*lyra-)/')
         ->and($html)->not->toMatch('/<button(?![^>]*class="[^"]*lyra-)/');
 })->with('auth views');
+
+it('sizes the auth container with a numeric max (keyword form emits invalid CSS)', function (string $view): void {
+    $html = View::make($view, ['request' => request()])->render();
+
+    // `<lyra:container max="sm">` renders `--container-max: smpx`, which is
+    // invalid CSS — a known DS bug. The views must pass a numeric px value.
+    expect($html)->toContain('--container-max: 480px')
+        ->and($html)->not->toContain('smpx');
+})->with('auth views');

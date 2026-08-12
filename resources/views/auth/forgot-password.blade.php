@@ -3,7 +3,7 @@
 @section('content')
 @php($errors = $errors ?? new \Illuminate\Support\ViewErrorBag)
 
-<lyra:container max="sm">
+<lyra:container max="480">
     <lyra:card>
         <lyra:brand mark="/img/lyra-mark.svg" />
         <h1>Forgot your password?</h1>

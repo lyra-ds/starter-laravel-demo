@@ -6,7 +6,10 @@
      an empty bag when nothing shared one yet. --}}
 @php($errors = $errors ?? new \Illuminate\Support\ViewErrorBag)
 
-<lyra:container max="sm">
+{{-- `max` must be numeric (px): the keyword form (`max="sm"`) emits invalid
+     CSS (`--container-max: smpx`) — a known DS bug already on the Task-10
+     findings list. --}}
+<lyra:container max="480">
     <lyra:card>
         {{-- `mark` has no default in the brand component; a placeholder
              asset path is used until the app supplies its own logo. --}}

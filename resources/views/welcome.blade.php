@@ -73,11 +73,19 @@
             the preview update with no rebuild.
         </p>
 
+        {{-- `variant` is a server-side Blade prop, so it can't react to
+             Alpine state. Each button renders as `secondary` and Alpine's
+             class object-syntax toggles the real `lyra-btn--*` classes at
+             runtime — object syntax also removes the server-baked
+             `lyra-btn--secondary` while a button is selected, so the two
+             variant classes never stack. --}}
         <div class="welcome-row" role="group" aria-label="White-label brand">
             <lyra:button
                 type="button"
                 size="sm"
-                x-bind:variant="brand === null ? 'primary' : 'secondary'"
+                variant="secondary"
+                x-bind:class="{ 'lyra-btn--primary': brand === null, 'lyra-btn--secondary': brand !== null }"
+                x-bind:aria-pressed="brand === null ? 'true' : 'false'"
                 x-on:click="brand = null; document.documentElement.removeAttribute('data-brand')"
             >
                 Default
@@ -85,7 +93,9 @@
             <lyra:button
                 type="button"
                 size="sm"
-                x-bind:variant="brand === 'citrus' ? 'primary' : 'secondary'"
+                variant="secondary"
+                x-bind:class="{ 'lyra-btn--primary': brand === 'citrus', 'lyra-btn--secondary': brand !== 'citrus' }"
+                x-bind:aria-pressed="brand === 'citrus' ? 'true' : 'false'"
                 x-on:click="brand = 'citrus'; document.documentElement.dataset.brand = 'citrus'"
             >
                 Citrus
@@ -93,7 +103,9 @@
             <lyra:button
                 type="button"
                 size="sm"
-                x-bind:variant="brand === 'ocean' ? 'primary' : 'secondary'"
+                variant="secondary"
+                x-bind:class="{ 'lyra-btn--primary': brand === 'ocean', 'lyra-btn--secondary': brand !== 'ocean' }"
+                x-bind:aria-pressed="brand === 'ocean' ? 'true' : 'false'"
                 x-on:click="brand = 'ocean'; document.documentElement.dataset.brand = 'ocean'"
             >
                 Ocean
@@ -101,7 +113,9 @@
             <lyra:button
                 type="button"
                 size="sm"
-                x-bind:variant="brand === 'grape' ? 'primary' : 'secondary'"
+                variant="secondary"
+                x-bind:class="{ 'lyra-btn--primary': brand === 'grape', 'lyra-btn--secondary': brand !== 'grape' }"
+                x-bind:aria-pressed="brand === 'grape' ? 'true' : 'false'"
                 x-on:click="brand = 'grape'; document.documentElement.dataset.brand = 'grape'"
             >
                 Grape
