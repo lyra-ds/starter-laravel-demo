@@ -1,13 +1,3 @@
-@php
-    $tomorrow = now()->addDay()->startOfDay();
-    $scheduleSlots = collect([9, 10, 11, 14, 15])
-        ->map(fn (int $hour) => [
-            'start' => $tomorrow->copy()->setTime($hour, 0)->toIso8601String(),
-            'end' => $tomorrow->copy()->setTime($hour, 30)->toIso8601String(),
-        ])
-        ->all();
-@endphp
-
 @extends('layouts.shell')
 
 @section('body')

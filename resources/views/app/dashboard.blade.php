@@ -1,26 +1,3 @@
-@php
-    $stats = [
-        ['label' => 'Active projects', 'value' => '12', 'delta' => '2 this month', 'direction' => 'up'],
-        ['label' => 'Open tasks', 'value' => '38', 'delta' => '5 since yesterday', 'direction' => 'down'],
-        ['label' => 'Team members', 'value' => '9', 'delta' => 'unchanged', 'direction' => 'flat'],
-        ['label' => 'Storage used', 'value' => '64%', 'delta' => '3% this week', 'direction' => 'up'],
-    ];
-
-    $activityColumns = [
-        ['key' => 'actor', 'label' => 'Member'],
-        ['key' => 'action', 'label' => 'Action'],
-        ['key' => 'target', 'label' => 'Item'],
-        ['key' => 'when', 'label' => 'When', 'align' => 'right'],
-    ];
-
-    $activityRows = [
-        ['id' => 1, 'actor' => 'Maya Chen', 'action' => 'updated', 'target' => 'Q3 roadmap', 'when' => '5 minutes ago'],
-        ['id' => 2, 'actor' => 'Diego Ramirez', 'action' => 'uploaded', 'target' => 'Brand assets.zip', 'when' => '1 hour ago'],
-        ['id' => 3, 'actor' => 'Priya Nair', 'action' => 'commented on', 'target' => 'Onboarding flow', 'when' => 'Yesterday'],
-        ['id' => 4, 'actor' => 'Owen Blake', 'action' => 'archived', 'target' => 'Legacy pricing page', 'when' => '2 days ago'],
-    ];
-@endphp
-
 @extends('layouts.shell')
 
 @section('body')

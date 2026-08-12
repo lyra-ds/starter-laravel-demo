@@ -1,13 +1,3 @@
-@php
-    $projectFiles = [
-        ['id' => 'design', 'name' => 'Design & UI', 'type' => 'folder', 'items' => 6, 'updated' => '2026-08-10'],
-        ['id' => 'contracts', 'name' => 'Contracts', 'type' => 'folder', 'items' => 3, 'updated' => '2026-08-05'],
-        ['id' => 'brand-assets', 'name' => 'Brand assets.zip', 'size' => 18_874_368, 'updated' => '2026-08-09'],
-        ['id' => 'roadmap', 'name' => 'Q3 roadmap.pdf', 'size' => 425_984, 'updated' => '2026-08-08'],
-        ['id' => 'onboarding', 'name' => 'Onboarding flow.fig', 'size' => 2_202_009, 'updated' => '2026-08-06', 'shared' => true],
-    ];
-@endphp
-
 @extends('layouts.shell')
 
 @section('body')
@@ -24,7 +14,7 @@
 
     <section>
         <h2>Project files</h2>
-        <lyra:file-manager :files="$projectFiles" :path="['Workspace', 'Q3 release']" />
+        <lyra:file-manager :files="$projectFiles" :path="$filesPath" />
     </section>
 
     <section>

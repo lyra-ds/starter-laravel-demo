@@ -1,18 +1,13 @@
 @php
+    // Presentational only: turns the route's $members/$memberActions data into data-table
+    // cell HTML. data-table only accepts scalar/Htmlable/Stringable cell values, so the
+    // person-cell and dropdown markup for each row has to be pre-rendered here.
     use Illuminate\Support\Facades\Blade;
     use Illuminate\Support\HtmlString;
 
     $renderPerson = static fn (string $name, string $detail): HtmlString => new HtmlString(
         Blade::render('<x-lyra::person-cell :name="$name" :detail="$detail" />', compact('name', 'detail')),
     );
-
-    $memberActions = [
-        ['type' => 'label', 'label' => 'Member'],
-        ['label' => 'View profile'],
-        ['label' => 'Change role'],
-        ['type' => 'separator'],
-        ['label' => 'Remove from team', 'danger' => true],
-    ];
 
     $renderActions = static fn (): HtmlString => new HtmlString(
         Blade::render(
@@ -28,12 +23,15 @@
         ['key' => 'actions', 'label' => '', 'align' => 'right'],
     ];
 
-    $teamRows = [
-        ['id' => 'maya', 'member' => $renderPerson('Maya Chen', 'maya@lyra-ds.dev'), 'role' => 'Maintainer', 'status' => 'Active', 'actions' => $renderActions()],
-        ['id' => 'diego', 'member' => $renderPerson('Diego Ramirez', 'diego@lyra-ds.dev'), 'role' => 'Designer', 'status' => 'Active', 'actions' => $renderActions()],
-        ['id' => 'priya', 'member' => $renderPerson('Priya Nair', 'priya@lyra-ds.dev'), 'role' => 'Engineer', 'status' => 'Active', 'actions' => $renderActions()],
-        ['id' => 'owen', 'member' => $renderPerson('Owen Blake', 'owen@lyra-ds.dev'), 'role' => 'Engineer', 'status' => 'Invited', 'actions' => $renderActions()],
-    ];
+    $teamRows = collect($members)
+        ->map(fn (array $member): array => [
+            'id' => $member['id'],
+            'member' => $renderPerson($member['name'], $member['email']),
+            'role' => $member['role'],
+            'status' => $member['status'],
+            'actions' => $renderActions(),
+        ])
+        ->all();
 @endphp
 
 @extends('layouts.shell')
