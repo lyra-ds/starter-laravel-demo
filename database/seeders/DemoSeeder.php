@@ -15,10 +15,12 @@ class DemoSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Lyra Demo',
-            'email' => 'demo@lyra-ds.dev',
-            'password' => 'lyra-demo-2026',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'demo@lyra-ds.dev'],
+            [
+                'name' => 'Lyra Demo',
+                'password' => 'lyra-demo-2026',
+            ]
+        );
     }
 }
