@@ -102,6 +102,17 @@
                 </lyra:fieldset>
             </section>
 
+            <section class="gallery-section" id="otp-input">
+                <h2>OTP Input</h2>
+                <p>Enter the six-digit code to confirm a release action.</p>
+                <lyra:otp-input
+                    name="release_verification_code"
+                    label="Verification code"
+                    hint="Enter the six-digit code sent to your team."
+                    :length="6"
+                />
+            </section>
+
             <section class="gallery-section" id="segmented-control">
                 <h2>Interactive Segmented Control</h2>
                 <p>Use the arrow keys to switch the release activity range.</p>
@@ -151,6 +162,37 @@
                             <lyra:button variant="danger" @click="dialogOpen = false">Confirm</lyra:button>
                         </x-slot:footer>
                     </lyra:dialog>
+                </div>
+            </section>
+
+            <section class="gallery-section" id="create-workspace-dialog">
+                <h2>Create Workspace Dialog</h2>
+                <p>Create a release workspace; the demo accepts the operation locally.</p>
+                <div x-data="{
+                    dialogOpen: false,
+                    handleCreate(event) {
+                        const { operationId, slug } = event.detail;
+                        const dialog = Alpine.$data(event.target);
+                        if (slug === 'taken') {
+                            dialog.reject(operationId, {
+                                fieldErrors: { slug: 'This URL is already in use.' },
+                                message: 'Choose another workspace URL.',
+                            });
+                        } else {
+                            dialog.accept(operationId);
+                        }
+                    },
+                    handleCancel(event) {
+                        Alpine.$data(event.target).cancel(event.detail.operationId);
+                    },
+                }">
+                    <lyra:button id="gallery-workspace-trigger" type="button" x-on:click="dialogOpen = true">Create workspace</lyra:button>
+                    <lyra:create-workspace-dialog
+                        x-model="dialogOpen"
+                        return-focus-to="#gallery-workspace-trigger"
+                        x-on:lyra:create-workspace="handleCreate($event)"
+                        x-on:lyra:create-workspace:cancel="handleCancel($event)"
+                    />
                 </div>
             </section>
 
@@ -363,6 +405,34 @@
             </div>
 
             <p>The three pickers open in a popover on desktop and switch automatically to a bottom sheet below 640px via <code>matchMedia</code>. Narrow the browser window to verify the responsive behavior.</p>
+        </section>
+
+        <section class="gallery-section gallery-section--wide" id="calendar-view">
+            <h2>Calendar View</h2>
+            <p>Review the release handoff in the weekly schedule and switch between day, week, and month.</p>
+            <div
+                x-data="{ view: 'week', date: '2026-08-12', openedEventId: null, slotAt: null }"
+                x-on:lyra:view-change="view = $event.detail"
+                x-on:lyra:change="date = $event.detail"
+                x-on:lyra:event-open="openedEventId = $event.detail.id"
+                x-on:lyra:slot-create="slotAt = $event.detail"
+            >
+                <lyra:calendar-view
+                    date="2026-08-12"
+                    view="week"
+                    :events="[
+                        ['id' => 'release-handoff', 'kind' => 'session', 'start' => '2026-08-12T10:00:00', 'end' => '2026-08-12T11:00:00', 'title' => 'Release handoff'],
+                    ]"
+                >
+                    <x-slot:popover>
+                        <strong x-text="popover?.event.title"></strong>
+                        <lyra:button type="button" variant="secondary" size="sm" x-on:click="closePopover()">Close</lyra:button>
+                    </x-slot:popover>
+                </lyra:calendar-view>
+                <p x-text="`View: ${view} · Date: ${date}`"></p>
+                <p x-show="openedEventId" x-text="`Opened: ${openedEventId}`"></p>
+                <p x-show="slotAt" x-text="`New slot: ${slotAt?.toLocaleString()}`"></p>
+            </div>
         </section>
 
         <section class="gallery-section gallery-section--wide" id="scheduling">
@@ -776,21 +846,82 @@
         <section class="gallery-section gallery-section--wide" id="files">
             <h2>Files</h2>
             <p>Upload release artifacts, then browse the files attached to this workspace.</p>
-            <lyra:file-upload
-                id="release-artifacts-upload"
-                label="Upload release artifacts"
-                hint="PDF, ZIP, or JSON · Up to 10 MB per file"
-                accept=".pdf,.zip,.json"
-                :max-size-m-b="10"
-                :items="[[
-                    'id' => 'release-notes',
-                    'name' => 'release-notes.pdf',
-                    'size' => 184320,
-                    'type' => 'application/pdf',
-                    'status' => 'success',
-                    'attemptId' => 'release-notes-1',
-                ]]"
-            />
+            <div x-data="{
+                uploadItems: [],
+                files: new Map(),
+                timers: new Map(),
+                patch(id, attemptId, statuses, update) {
+                    this.uploadItems = this.uploadItems.map((item) =>
+                        item.id === id && item.attemptId === attemptId && statuses.includes(item.status) ? update(item) : item,
+                    );
+                },
+                beginUpload(id, attemptId) {
+                    const base = ({ name, size, type }) => ({ id, name, size, type, attemptId });
+                    this.uploadItems = this.uploadItems.map((item) =>
+                        item.id === id ? { ...base(item), status: 'uploading', progress: { kind: 'indeterminate' } } : item,
+                    );
+                    let percent = 0;
+                    const timer = setInterval(() => {
+                        percent += 20;
+                        const file = this.files.get(id);
+                        if (percent < 100) {
+                            this.patch(id, attemptId, ['uploading'], (item) => ({ ...item, progress: { kind: 'determinate', value: percent } }));
+                        } else if (file.name.startsWith('fail')) {
+                            clearInterval(timer);
+                            this.timers.delete(attemptId);
+                            this.patch(id, attemptId, ['uploading'], (item) => ({
+                                ...base(item), status: 'error',
+                                error: { kind: 'transport', message: 'The demo upload failed.', retryable: true },
+                            }));
+                        } else {
+                            clearInterval(timer);
+                            this.timers.delete(attemptId);
+                            this.patch(id, attemptId, ['uploading'], (item) => ({ ...base(item), status: 'success' }));
+                        }
+                    }, 400);
+                    this.timers.set(attemptId, timer);
+                },
+                startUploads({ selections }) {
+                    this.uploadItems = [...this.uploadItems, ...selections.map(({ proposedItem }) => proposedItem)];
+                    for (const selection of selections) {
+                        if (typeof selection.proposedAttemptId !== 'string') continue;
+                        this.files.set(selection.id, selection.file);
+                        this.beginUpload(selection.id, selection.proposedAttemptId);
+                    }
+                },
+                retryUpload({ id, proposedAttemptId }) {
+                    this.beginUpload(id, proposedAttemptId);
+                },
+                cancelUpload({ id, attemptId }) {
+                    clearInterval(this.timers.get(attemptId));
+                    this.timers.delete(attemptId);
+                    this.patch(id, attemptId, ['uploading'], (item) => ({
+                        id: item.id, name: item.name, size: item.size, type: item.type, attemptId, status: 'canceled',
+                    }));
+                },
+                removeUpload({ id }) {
+                    const item = this.uploadItems.find((entry) => entry.id === id);
+                    if (item) clearInterval(this.timers.get(item.attemptId));
+                    this.timers.delete(item?.attemptId);
+                    this.files.delete(id);
+                    this.uploadItems = this.uploadItems.filter((entry) => entry.id !== id);
+                },
+            }">
+                <lyra:file-upload
+                    id="release-artifacts-upload"
+                    name="release_artifacts[]"
+                    label="Upload release artifacts"
+                    hint="PDF, ZIP, or JSON · Up to 10 MB per file"
+                    accept=".pdf,.zip,.json"
+                    :max-size-m-b="10"
+                    multiple
+                    x-model="uploadItems"
+                    x-on:lyra:file-upload:select="startUploads($event.detail)"
+                    x-on:lyra:file-upload:retry="retryUpload($event.detail)"
+                    x-on:lyra:file-upload:cancel="cancelUpload($event.detail)"
+                    x-on:lyra:file-upload:remove="removeUpload($event.detail)"
+                />
+            </div>
 
             <lyra:file-manager
                 :path="['Workspaces', 'Lyra DS', 'August release']"
