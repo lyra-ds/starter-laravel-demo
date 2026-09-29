@@ -777,16 +777,18 @@
             <h2>Files</h2>
             <p>Upload release artifacts, then browse the files attached to this workspace.</p>
             <lyra:file-upload
+                id="release-artifacts-upload"
                 label="Upload release artifacts"
                 hint="PDF, ZIP, or JSON · Up to 10 MB per file"
                 accept=".pdf,.zip,.json"
                 :max-size-m-b="10"
-                :default-items="[[
+                :items="[[
                     'id' => 'release-notes',
                     'name' => 'release-notes.pdf',
                     'size' => 184320,
-                    'progress' => 100,
-                    'status' => 'done',
+                    'type' => 'application/pdf',
+                    'status' => 'success',
+                    'attemptId' => 'release-notes-1',
                 ]]"
             />
 
