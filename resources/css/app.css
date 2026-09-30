@@ -382,6 +382,7 @@
 
 .user-menu__item:hover {
   background: var(--surface-sunken);
+  text-decoration: none;
 }
 
 .user-menu__item--danger {
