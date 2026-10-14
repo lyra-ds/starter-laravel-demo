@@ -185,12 +185,6 @@
   height: 100%;
 }
 
-/* The sidebar column hugs the app-sidebar so the rail collapse animates the
-   whole column instead of leaving dead space (box layout only). */
-.product-shell .lyra-shell--content .lyra-shell__sidebar {
-  width: auto;
-}
-
 /* Content column stacks page + footer; short pages still pin the footer down. */
 .product-shell .lyra-shell--content .lyra-shell__content {
   display: flex;
@@ -199,29 +193,6 @@
 
 .product-shell .page {
   flex: 1 0 auto;
-}
-
-/* The app-sidebar stretches to the full column height so its footer
-   (user card + collapse toggle) pins to the bottom of the viewport.
-   The component's own height: 100% needs every wrapper in the chain
-   to carry a height. */
-.product-shell .lyra-shell__sidebar > * {
-  height: 100%;
-}
-
-/* DS gap: the base (page-mode) shell rules set align-items: start, a grid
-   gap, and sticky sidebar behavior, and the content mode never resets them —
-   columns refuse to stretch (content clips instead of scrolling, the footer
-   never shows) and a phantom gutter splits sidebar from content. Logged
-   upstream; reset locally. */
-.product-shell .lyra-shell--content {
-  align-items: stretch;
-  gap: 0;
-}
-
-.product-shell .lyra-shell--content .lyra-shell__sidebar {
-  align-self: stretch;
-  padding-right: 0;
 }
 
 /* Rail state: the brand block (logo + workspace switcher) cannot shrink to
@@ -411,6 +382,7 @@
 
 .user-menu__item:hover {
   background: var(--surface-sunken);
+  text-decoration: none;
 }
 
 .user-menu__item--danger {
