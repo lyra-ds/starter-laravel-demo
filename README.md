@@ -32,6 +32,33 @@ vendor/bin/sail artisan migrate --seed
 
 The app listens on `APP_PORT` (defaults to `80`; set it in `.env` if the port is taken).
 
+## Lyra compatibility and migration
+
+The qualified package combination is `lyra-ds/blade` 1.0.0,
+`@lyra-ds/alpine` 2.0.0, and `@lyra-ds/styles` 1.2.0. Blade's public
+templates/API and Composer requirement remain unchanged. The Lyra Alpine
+package still supports Alpine.js `>=3.13 <4`; this is not an Alpine.js major upgrade.
+
+Lyra Alpine 2.0.0 changes the implicit toast defaults: info/success messages
+last 8000 ms, while danger/error messages persist. Pointer hover and focus
+independently pause the remaining time. An explicit per-toast duration,
+including `duration: 0` for persistence, overrides global configuration.
+The demo's info toast explicitly uses `duration: 0` and remains persistent;
+other demo toasts inherit the defaults.
+
+To restore the previous 4000 ms default for every tone, set the store duration
+after `Alpine.plugin(lyra)` and before `Alpine.start()`:
+
+```js
+Alpine.store('lyraToasts').duration = 4000;
+```
+
+Changed global configuration applies only to newly queued messages; explicit
+per-toast durations still take precedence. No application configuration change
+is included in this adoption. To roll back, revert the atomic consumer-adoption
+commit to restore the previous manifest ranges and lockfile; no data or schema
+migration is needed.
+
 ## Authentication
 
 Unlike the template, this demo wires up [Laravel Fortify](https://laravel.com/docs/fortify)
