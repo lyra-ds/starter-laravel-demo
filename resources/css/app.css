@@ -143,6 +143,10 @@
   margin-top: 1rem;
 }
 
+.gallery-app-sidebar-preview {
+  height: 24rem;
+}
+
 /* The content-scroll shell expects a fixed-height frame (100% of the viewport in a real app).
    Give it one inside the gallery card so it doesn't overflow the section. */
 .gallery-section .lyra-shell--content {

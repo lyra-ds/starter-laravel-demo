@@ -673,38 +673,40 @@
                     \Illuminate\Support\Facades\Blade::render('<lyra:icon name="'.$name.'" :size="18" />'),
                 );
             @endphp
-            <lyra:app-sidebar
-                brand="Lyra releases"
-                :width="280"
-                :groups="[
-                    [
-                        'heading' => 'Release workspace',
-                        'items' => [
-                            ['id' => 'release-overview', 'label' => 'Overview', 'icon' => $appSidebarIcon('layout-dashboard'), 'active' => true],
-                            ['id' => 'release-builds', 'label' => 'Builds', 'icon' => $appSidebarIcon('package'), 'badge' => 3],
-                            ['id' => 'release-deployments', 'label' => 'Deployments', 'icon' => $appSidebarIcon('rocket')],
+            <div class="gallery-app-sidebar-preview">
+                <lyra:app-sidebar
+                    brand="Lyra releases"
+                    :width="280"
+                    :groups="[
+                        [
+                            'heading' => 'Release workspace',
+                            'items' => [
+                                ['id' => 'release-overview', 'label' => 'Overview', 'icon' => $appSidebarIcon('layout-dashboard'), 'active' => true],
+                                ['id' => 'release-builds', 'label' => 'Builds', 'icon' => $appSidebarIcon('package'), 'badge' => 3],
+                                ['id' => 'release-deployments', 'label' => 'Deployments', 'icon' => $appSidebarIcon('rocket')],
+                            ],
                         ],
-                    ],
-                    [
-                        'heading' => 'Manage',
-                        'items' => [
-                            ['id' => 'release-team', 'label' => 'Team', 'icon' => $appSidebarIcon('users')],
-                            ['id' => 'release-settings', 'label' => 'Settings', 'icon' => $appSidebarIcon('settings')],
+                        [
+                            'heading' => 'Manage',
+                            'items' => [
+                                ['id' => 'release-team', 'label' => 'Team', 'icon' => $appSidebarIcon('users')],
+                                ['id' => 'release-settings', 'label' => 'Settings', 'icon' => $appSidebarIcon('settings')],
+                            ],
                         ],
-                    ],
-                ]"
-                collapsible
-            >
-                <x-slot:footer>
-                    <div class="lyra-appsidebar__user">
-                        <lyra:icon name="user" :size="20" />
-                        <div>
-                            <div class="lyra-appsidebar__user-name">Maya Chen</div>
-                            <div class="lyra-appsidebar__user-role">Maintainer</div>
+                    ]"
+                    collapsible
+                >
+                    <x-slot:footer>
+                        <div class="lyra-appsidebar__user">
+                            <lyra:icon name="user" :size="20" />
+                            <div>
+                                <div class="lyra-appsidebar__user-name">Maya Chen</div>
+                                <div class="lyra-appsidebar__user-role">Maintainer</div>
+                            </div>
                         </div>
-                    </div>
-                </x-slot:footer>
-            </lyra:app-sidebar>
+                    </x-slot:footer>
+                </lyra:app-sidebar>
+            </div>
         </section>
 
         <section class="gallery-section gallery-section--wide" id="page-structure">
